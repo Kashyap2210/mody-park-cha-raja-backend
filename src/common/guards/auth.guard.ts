@@ -2,8 +2,10 @@ import {
   BadRequestException,
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
   UnauthorizedException,
+  forwardRef,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -14,12 +16,13 @@ import { UserService } from '../../user/user.service';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
 
     const token = this.extractTokenFromHeader(request);
 
@@ -27,9 +30,12 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get('JWT_SECRET'),
-      });
+      const payload: { userId: number } = await this.jwtService.verifyAsync(
+        token,
+        {
+          secret: this.configService.get('JWT_SECRET'),
+        },
+      );
 
       const [user] = await this.userService.search({
         id: [payload.userId],
@@ -43,10 +49,10 @@ export class AuthGuard implements CanActivate {
 
       request['user'] = user;
     } catch (error) {
-      throw new BadRequestException({
-        key: error?.response?.key,
-        message: error?.response?.message,
-      });
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new UnauthorizedException();
     }
 
     return true;

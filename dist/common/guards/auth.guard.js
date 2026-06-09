@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
@@ -45,10 +48,10 @@ let AuthGuard = class AuthGuard {
             request['user'] = user;
         }
         catch (error) {
-            throw new common_1.BadRequestException({
-                key: error?.response?.key,
-                message: error?.response?.message,
-            });
+            if (error instanceof common_1.BadRequestException) {
+                throw error;
+            }
+            throw new common_1.UnauthorizedException();
         }
         return true;
     }
@@ -64,6 +67,7 @@ let AuthGuard = class AuthGuard {
 exports.AuthGuard = AuthGuard;
 exports.AuthGuard = AuthGuard = __decorate([
     (0, common_1.Injectable)(),
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => user_service_1.UserService))),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         user_service_1.UserService,
         config_1.ConfigService])

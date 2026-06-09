@@ -20,13 +20,13 @@ exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            user_module_1.UserModule,
+            (0, common_1.forwardRef)(() => user_module_1.UserModule),
             jwt_1.JwtModule.register({}),
             config_1.ConfigModule,
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService, auth_guard_1.AuthGuard],
-        exports: [auth_guard_1.AuthGuard, jwt_1.JwtModule],
+        exports: [auth_guard_1.AuthGuard, jwt_1.JwtModule, config_1.ConfigModule],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

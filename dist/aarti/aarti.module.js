@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AartiModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const user_module_1 = require("../user/user.module");
 const auth_module_1 = require("../auth/auth.module");
 const aarti_controller_1 = require("./aarti.controller");
 const aarti_entity_1 = require("./aarti.entity");
@@ -18,7 +19,7 @@ let AartiModule = class AartiModule {
 exports.AartiModule = AartiModule;
 exports.AartiModule = AartiModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([aarti_entity_1.Aarti]), auth_module_1.AuthModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([aarti_entity_1.Aarti]), auth_module_1.AuthModule, user_module_1.UserModule],
         controllers: [aarti_controller_1.AartiController],
         providers: [aarti_service_1.AartiService],
     })
