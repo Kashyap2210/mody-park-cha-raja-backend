@@ -12,13 +12,19 @@ export class Aarti {
   id: number;
 
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  titleEN: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  titleMR: string;
 
   @Column({ type: 'text' })
   englishVersion: string;
 
   @Column({ type: 'text' })
   hindiVersion: string;
+
+  @Column({ type: 'int', nullable: true, name: 'display_order' })
+  displayOrder: number;
 
   @CreateDateColumn({ type: 'datetime' })
   createdOn: Date;

@@ -1,15 +1,24 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateAartiDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  titleEN: string;
 
   @IsString()
   @IsNotEmpty()
-  englishVersion: string;
+  titleMR: string;
 
   @IsString()
-  @IsNotEmpty()
-  hindiVersion: string;
+  @IsOptional()
+  englishVersion?: string;
+
+  @IsString()
+  @IsOptional()
+  hindiVersion?: string;
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  displayOrder?: number;
 }

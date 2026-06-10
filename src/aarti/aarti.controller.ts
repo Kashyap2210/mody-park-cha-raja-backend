@@ -17,7 +17,6 @@ import { CreateAartiDto } from './dto/create-aarti.dto';
 import { UpdateAartiDto } from './dto/update-aarti.dto';
 
 @Controller('aarti')
-@UseGuards(AuthGuard)
 export class AartiController {
   constructor(private readonly aartiService: AartiService) {}
 
@@ -32,6 +31,7 @@ export class AartiController {
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   create(
     @Body() dto: CreateAartiDto,
     @CurrentUser() user: User,
@@ -40,6 +40,7 @@ export class AartiController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateAartiDto,
@@ -49,6 +50,7 @@ export class AartiController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.aartiService.remove(id);
   }
